@@ -24,7 +24,7 @@ const displayMeals = (meals) => {
             <p class="card-text">
             ${meal.strInstructions}
             </p>
-            <button onclick="loadMealId(${meal.idMeal})" type="button" class="btn btn-primary" data-bs-toggle="modal"            data-bs-target="#mealDetails">
+            <button onclick="loadMealId2(${meal.idMeal})" type="button" class="btn btn-primary" data-bs-toggle="modal"            data-bs-target="#mealDetails">
                 Details
             </button>
         </div>
@@ -42,11 +42,27 @@ const searchMeals = () => {
   loadMeals(searchText);
 };
 
+// without async await
 const loadMealId = (idMeal) => {
   const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`;
   fetch(url)
     .then((res) => res.json())
-    .then((data) => displayMealDetails(data.meals[0]));
+    .then((data) => displayMealDetails(data.meals[0]))
+    // .catch is used for error handling
+    .catch((error) => console.log(error));
+};
+
+// async await
+const loadMealId2 = async (idMeal) => {
+  const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idMeal}`;
+  // try catch is used for error handling
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    displayMealDetails(data.meals[0]);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const displayMealDetails = (meal) => {
@@ -58,4 +74,4 @@ const displayMealDetails = (meal) => {
   `;
 };
 
-loadMeals("rice");
+loadMeals("fish");
